@@ -34,7 +34,7 @@
     border:  px solid var(--shadow-dark-color);
     padding: 1rem;
     cursor: pointer;
-    transition: all .3s ease-in;
+    transition: all .2s ease-in;
 }
 
 .connectWallet_box_provider_item:hover{
