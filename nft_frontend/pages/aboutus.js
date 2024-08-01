@@ -9,12 +9,12 @@ import images from '../img';
 const aboutus = () => {
   const founderArray = [
     {
-      name: "Kevin Lee",
+      name: "Amy James",
       position: "Co-founder and Chief Executive",
       images: images.founder1,
     },
     {
-      name: "Danien Jame",
+      name: "Danien Truedo",
       position: "Co-founder and Chief Executive",
       images: images.founder2,
     },

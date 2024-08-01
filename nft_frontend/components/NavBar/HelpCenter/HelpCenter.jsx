@@ -20,7 +20,7 @@ const HelpCenter = () => {
       link: "sign-up"
     },
     {
-      name: "Sign In",
+      name: "Log In",
       link: "sign-in"
     },
     {
