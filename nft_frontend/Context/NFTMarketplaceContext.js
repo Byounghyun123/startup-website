@@ -54,6 +54,8 @@ export const NFTMarketplaceProvider = ({children}) => {
             } else {
                 console.log("No Account Found");
             }
+
+            console.log(currentAccount);
         } catch (error) {
             console.log("Something went wrong while connecting to wallet", error);
         }
@@ -168,7 +170,7 @@ export const NFTMarketplaceProvider = ({children}) => {
         } catch (error) {
             console.log("Error while fetching NFTS", error);
         }
-    }
+    };
 
     //--FETCHING MY NFT OR LISTED NFTs
     const fetchMyNFTsOrListedNFTs = async(type) => {
@@ -206,6 +208,22 @@ export const NFTMarketplaceProvider = ({children}) => {
         } catch (error) {
             console.log("Error while fetching listed NFTs", error);
         }
+    };
+
+    //---BUY NFTs FUNCTION
+    const buyNFT = async(nft) => {
+        try {
+            const contract = await connectingWithSmartContract();
+            const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+
+            const transaction = await contract.createMarketSale(nft.tokenId, {
+                value: price,
+            });
+
+            await transaction.wait();
+        } catch (error) {
+            console.error("Error while buying NFT", error);
+        }
     }
 
     return (
@@ -218,6 +236,8 @@ export const NFTMarketplaceProvider = ({children}) => {
                 createSale,
                 fetchNFTs,
                 fetchMyNFTsOrListedNFTs,
+                buyNFT,
+                currentAccount,
                 titleData,
             }}
         >
