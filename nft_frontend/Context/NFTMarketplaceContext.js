@@ -23,11 +23,16 @@ const connectingWithSmartContract = async() => {
     try {
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
-        // const provider = new ethers.providers.Web3Provider(connection);
-        const provider = new ethers.BrowserProvider(connection);
-        const signer = await provider.getSigner();
+
+        const provider = new ethers.providers.Web3Provider(connection);
+        // const provider = new ethers.BrowserProvider(connection);
+        console.log(provider);
+
+        const signer = provider.getSigner();
+        console.log(signer);
 
         const contract = fetchContract(signer);
+        // console.log(contract);
         return contract;
     } catch (error) {
         console.log("Something went wrong while connecting with contract", error);
@@ -145,8 +150,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
     //----createSale FUNCTION
     const createSale = async(url, formInputPrice, isReselling, id) => {
         try {
-            const price = ethers.parseUnits(formInputPrice, 'ether');
+            // const price = ethers.parseUnits(formInputPrice, 'ether');
+            const price = ethers.utils.parseUnits(formInputPrice, "ether");
+            // console.log(price);
             const contract = await connectingWithSmartContract();
+            // console.log(contract);
 
             const listingPrice = await contract.getListingPrice();
 
