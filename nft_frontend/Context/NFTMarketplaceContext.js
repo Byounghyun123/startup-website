@@ -53,8 +53,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             if(accounts.length){
                 setCurrentAccount(accounts[0]);
-                const provider = new ethers.BrowserProvider(connection);
-                return accounts[0];
+                // const provider = new ethers.BrowserProvider(connection);
+                // return accounts[0];
             } else {
                 console.log("No Account Found");
             }
