@@ -16,7 +16,7 @@ contract NFTMarketplace is ERC721URIStorage{
     Counters.Counter private _tokenIds; // every nft will have a unique id
     Counters.Counter private _itemsSold; // keep track of how many tokens getting sold
 
-    uint256 listingPrice = 0.0025 ether; // initializing the listing price state variable.
+    uint256 listingPrice = 0.000001 ether; // initializing the listing price state variable.
 
     address payable owner; // whoever deploys this smart contract will become the owner. This is payable so that owner can receive funds.
 
@@ -56,6 +56,7 @@ contract NFTMarketplace is ERC721URIStorage{
 
     // updating the price listing.
     function updateListingPrice(uint256 _listingPrice) public payable onlyOwner{
+        require(owner == msg.sender, "Only marketplace owner can update listing price.");
         listingPrice = _listingPrice;
     }
 
@@ -79,8 +80,8 @@ contract NFTMarketplace is ERC721URIStorage{
     }
 
     // CREATING MARKET ITEM - create the nft and assign all the data to that particular nft.
-    function createMarketItem(uint256 tokenId, uint256 price) private{
-        require(price > 0, "Price must be at least 1");
+    function createMarketItem(uint256 tokenId, uint256 price) private {
+        require(price > 0, "Price must be at least 1 wei");
         require(msg.value == listingPrice, "Price must be equal to listing price");
 
         idMarketItem[tokenId] = MarketItem(
@@ -125,8 +126,7 @@ contract NFTMarketplace is ERC721URIStorage{
         require(msg.value == price, "Please submit the asking price in order to complete the purchase");
 
         idMarketItem[tokenId].owner = payable(msg.sender);
-        idMarketItem[tokenId].sold = true;
-        idMarketItem[tokenId].owner = payable(address(0)); // at this moment, the nft doesn't below to the contract.
+        idMarketItem[tokenId].sold = true; // at this moment, the nft doesn't below to the contract.
 
         _itemsSold.increment();
 
@@ -135,6 +135,7 @@ contract NFTMarketplace is ERC721URIStorage{
         // earn the commission fee
         payable(owner).transfer(listingPrice);
         payable(idMarketItem[tokenId].seller).transfer(msg.value);
+        idMarketItem[tokenId].seller = payable(address(0));
     }
 
     // function that returns the unsold nft that belongs to the contract address.

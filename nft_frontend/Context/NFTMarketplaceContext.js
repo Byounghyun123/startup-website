@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
-import Router from 'next/router';
+import { useRouter } from "next/router";
 import axios from 'axios';
 
 // INTERNAL IMPORT
-import { NFTMarketplaceAddress, NFTMarketplaceABI } from './constants';
+import {
+    NFTMarketplaceAddress,
+    NFTMarketplaceABI
+} from './constants';
 
 //---FETCHING SMART CONTRACT (required for every web3 platform)
 const fetchContract = (signerOrProvider)=>
@@ -20,8 +23,9 @@ const connectingWithSmartContract = async() => {
     try {
         const web3Modal = new Web3Modal();
         const connection = await web3Modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer = provider.getSigner();
+        // const provider = new ethers.providers.Web3Provider(connection);
+        const provider = new ethers.BrowserProvider(connection);
+        const signer = await provider.getSigner();
 
         const contract = fetchContract(signer);
         return contract;
@@ -49,6 +53,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             if(accounts.length){
                 setCurrentAccount(accounts[0]);
+                const provider = new ethers.BrowserProvider(connection);
+                return accounts[0];
             } else {
                 console.log("No Account Found");
             }
@@ -90,8 +96,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
                     url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
                     data: formData,
                     headers: {
-                        pinata_api_key: `bab8138584ca59a08cd9`,
-                        pinata_secret_api_key: `3d787a1f8c3cc660c659f194131d1499551ef439a11b994e51a965efc5a1d364`,
+                        pinata_api_key: `bba5b73a6ae8335ac5d3`,
+                        pinata_secret_api_key: `113142ada5f9c7e565ab88a635cc9261e38d3c5a7f25926ab77d1e11fa8b9123`,
                         "Content-Type": "multipart/form-data",
                     },
                 });
@@ -109,21 +115,20 @@ export const NFTMarketplaceProvider = ({ children }) => {
     };
 
     //---CREATE NFT FUNCTION
-    const createNFT = async(image, formInput, fileUrl, router) => {
-        const {name, description, price} = formInput;
-        if(!name || !description || !price || !fileUrl)
-            return console.log("Data is missing", error);
+    const createNFT = async(name, price, image, description, router) => {
+        if(!name || !description || !price || !image)
+            return console.log("Data is missing");
 
-        const data = JSON.stringify({name, description, image: fileUrl});
+        const data = JSON.stringify({ name, description, image });
 
         try {
             const response = await axios({
                 method: "POST",
-                url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
                 data: data,
                 headers: {
-                    pinata_api_key: `bab8138584ca59a08cd9`,
-                    pinata_secret_api_key: `3d787a1f8c3cc660c659f194131d1499551ef439a11b994e51a965efc5a1d364`,
+                    pinata_api_key: `bba5b73a6ae8335ac5d3`,
+                    pinata_secret_api_key: `113142ada5f9c7e565ab88a635cc9261e38d3c5a7f25926ab77d1e11fa8b9123`,
                     "Content-Type": "application/json",
                 },
             });
@@ -140,7 +145,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     //----createSale FUNCTION
     const createSale = async(url, formInputPrice, isReselling, id) => {
         try {
-            const price = ethers.utils.parseUnits(formInputPrice, 'ether');
+            const price = ethers.parseUnits(formInputPrice, 'ether');
             const contract = await connectingWithSmartContract();
 
             const listingPrice = await contract.getListingPrice();
@@ -153,8 +158,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
                     value: listingPrice.toString(),
                 });
 
-                await transaction.wait();
-                console.log(transaction);
+            await transaction.wait();
+            console.log(transaction);
         } catch (error) {
             console.log("error while creating sale", error);
         }
