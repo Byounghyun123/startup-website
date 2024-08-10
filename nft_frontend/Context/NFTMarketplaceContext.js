@@ -37,7 +37,7 @@ const connectingWithSmartContract = async() => {
     } catch (error) {
         console.log("Something went wrong while connecting with contract", error);
     }
-}; 
+};
 
 export const NFTMarketplaceContext = React.createContext();
 
@@ -46,6 +46,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
     //-----USESTATE
     const [currentAccount, setCurrentAccount] = useState("");
+    const router = useRouter();
 
     //---CHECK IF WALLET IS CONNECTED (required for every web3 platform)
     const checkIfWalletConnected = async() => {
@@ -168,6 +169,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             await transaction.wait();
             console.log(transaction);
+            router.push('/searchPage');
         } catch (error) {
             console.log("error while creating sale", error);
         }
@@ -179,6 +181,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             const web3Modal = new Web3Modal();
             const connection = await web3Modal.connect();
             const provider = new ethers.providers.Web3Provider(connection);
+            // const provider = new ethers.BrowserProvider(connection);
 
             const contract = fetchContract(provider);
 
