@@ -187,7 +187,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             const data = await contract.fetchMarketItem();
 
-            console.log(data);
+            // console.log(data);
 
             const items = await Promise.all(
                 data.map(async({ tokenId, seller, owner, price: unformattedPrice }) => {
@@ -219,6 +219,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
             console.log("Error while fetching NFTS", error);
         }
     };
+
+    useEffect(() => {
+      fetchNFTs();
+    }, []);
+    
 
     //--FETCHING MY NFT OR LISTED NFTs
     const fetchMyNFTsOrListedNFTs = async(type) => {
