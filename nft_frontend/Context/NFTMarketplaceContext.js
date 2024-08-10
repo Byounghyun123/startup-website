@@ -274,6 +274,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             });
 
             await transaction.wait();
+            router.push('/author');
         } catch (error) {
             console.error("Error while buying NFT", error);
         }
