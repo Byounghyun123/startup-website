@@ -21,7 +21,7 @@ const searchPage = () => {
     setNfts(items.reverse());
     setNftsCopy(items);
    });
-  });
+  }, []);
 
   const onHandleSearch = (value) => {
     const filteredNFTS = nfts.filter(({name}) => 
