@@ -263,6 +263,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
         }
     };
 
+    useEffect(() => {
+        fetchMyNFTsOrListedNFTs();
+    }, []);
+    
+
     //---BUY NFTs FUNCTION
     const buyNFT = async(nft) => {
         try {
@@ -278,7 +283,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         } catch (error) {
             console.error("Error while buying NFT", error);
         }
-    }
+    };
 
     return (
         <NFTMarketplaceContext.Provider
