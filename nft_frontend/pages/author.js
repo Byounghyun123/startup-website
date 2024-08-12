@@ -70,9 +70,9 @@ const author = () => {
     
 
     return (
-        <div className={Style.banner}>
+        <div className={Style.author}>
             <Banner bannerImage={images.creatorbackground2} />
-            <AuthorProfileCard />
+            <AuthorProfileCard currentAccount={currentAccount}/>
             <AuthorTaps
                 setCollectibles={setCollectibles}
                 setCreated={setCreated}
