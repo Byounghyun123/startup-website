@@ -6,24 +6,24 @@ import images from '../../img';
 import { NFTCardTwo } from '../../collectionPage/collectionIndex';
 import FollowerTabCard from '../../components/FollowerTab/FollowerTabCard/FollowerTabCard';
 
-const AuthorNFTCardBox = ({ collectibles, created, like, follower, following }) => {
-  const collectiblesArray = [
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3,
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3,
-    images.nft_image_1,
-    images.nft_image_2
-  ];
+const AuthorNFTCardBox = ({ collectibles, created, like, follower, following, nfts, myNFTs }) => {
+  // const collectiblesArray = [
+  //   images.nft_image_1,
+  //   images.nft_image_2,
+  //   images.nft_image_3,
+  //   images.nft_image_1,
+  //   images.nft_image_2,
+  //   images.nft_image_3,
+  //   images.nft_image_1,
+  //   images.nft_image_2
+  // ];
 
-  const createdArray = [
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3,
-    images.nft_image_1
-  ];
+  // const createdArray = [
+  //   images.nft_image_1,
+  //   images.nft_image_2,
+  //   images.nft_image_3,
+  //   images.nft_image_1
+  // ];
 
   const likeArray = [
     images.nft_image_1,
@@ -85,8 +85,8 @@ const AuthorNFTCardBox = ({ collectibles, created, like, follower, following }) 
 
   return (
     <div className={Style.AuthorNFTCardBox}>
-      {collectibles && <NFTCardTwo NFTData={collectiblesArray} />}
-      {created && <NFTCardTwo NFTData={createdArray} />}
+      {collectibles && <NFTCardTwo NFTData={nfts} />}
+      {created && <NFTCardTwo NFTData={myNFTs} />}
       {like && <NFTCardTwo NFTData={likeArray} />}
       {follower && (
         <div className={Style.AuthorNFTCardBox_box}>

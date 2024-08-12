@@ -12,6 +12,9 @@ import {
   AuthorNFTCardBox,
 } from "../authorPage/componentIndex";
 
+// IMPORT SMART CONTRACT
+import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
+
 const author = () => {
     const popularArray = [
         {
@@ -46,6 +49,26 @@ const author = () => {
     const [follower, setFollower] = useState(false);
     const [following, setFollowing] = useState(false);
 
+    // IMPORT SMART CONTRACT DATA
+    const { fetchMyNFTsOrListedNFTs, currentAccount } = useContext(NFTMarketplaceContext);
+
+    const [nfts, setNfts] = useState([]);
+    const [myNFTs, setMyNFTs] = useState([]);
+
+    useEffect(() => {
+      fetchMyNFTsOrListedNFTs("fetchItemsListed").then((items) => {
+        setNfts(items);
+      });
+    }, []);
+
+    useEffect(() => {
+      fetchMyNFTsOrListedNFTs("fetchMyNFT").then((items) => {
+        setMyNFTs(items);
+      });
+    }, []);
+    
+    
+
     return (
         <div className={Style.banner}>
             <Banner bannerImage={images.creatorbackground2} />
@@ -64,6 +87,8 @@ const author = () => {
                 like={like}
                 follower={follower}
                 following={following}
+                nfts={nfts}
+                myNFTs={myNFTs}
             />
             <Title
                 heading="Popular Creators"
