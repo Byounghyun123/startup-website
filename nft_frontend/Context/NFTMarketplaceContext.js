@@ -143,6 +143,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             console.log(url);
 
             await createSale(url, price);
+            router.push('/searchPage');
         } catch (error) {
             console.log("Error while creating NFT", error);
         }
@@ -169,7 +170,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             await transaction.wait();
             console.log(transaction);
-            router.push('/searchPage');
         } catch (error) {
             console.log("error while creating sale", error);
         }
