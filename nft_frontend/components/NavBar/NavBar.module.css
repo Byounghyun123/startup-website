@@ -26,6 +26,7 @@
 .logo{
   color: var(--icons-color);
   font-size: 4rem;
+  cursor: pointer;
 }
 
 .navbar_container_left_box_input_box{

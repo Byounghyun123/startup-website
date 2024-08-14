@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { GrClose } from 'react-icons/gr';
 import {
   TiSocialFacebook,
@@ -22,6 +23,8 @@ const SideBar = ({ setOpenSideMenu, currentAccount, connectWallet }) => {
   // -------USESTATE
   const [openDiscover, setOpenDiscover] = useState(false);
   const [openHelp, setOpenHelp] = useState(false);
+
+  const router = useRouter();
 
   //------DISCOVER NAVIGATION MENU
   const discover = [
@@ -176,9 +179,7 @@ const SideBar = ({ setOpenSideMenu, currentAccount, connectWallet }) => {
         {currentAccount == "" ? (
           <Button btnName="Connect" handleClick={() => connectWallet()} />
         ) : (
-          <a href="/uploadNFT">
-            <Button btnName="Create" handleClick={() => {}} />
-          </a>
+          <Button btnName="Create" handleClick={() => router.push('/uploadNFT')} />
         )}
 
         <Button btnName="Connect Wallet" handleClick={() => {}}/>
