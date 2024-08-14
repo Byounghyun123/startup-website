@@ -22,7 +22,6 @@ const resellToken = () => {
         if(!tokenURI) return;
         const { data } = await axios.get(tokenURI);
 
-        setPrice(data.price);
         setImage(data.image);
     };
     useEffect(() => {
@@ -30,8 +29,12 @@ const resellToken = () => {
     }, [id]);
 
     const resell = async() => {
-        await createSale(tokenURI, price, true, id);
-        router.push('./author');
+        try {
+            await createSale(tokenURI, price, true, id);
+            router.push('./author');
+        } catch (error) {
+            console.log("Error while resell", error);
+        }
     };
 
     return (
@@ -45,6 +48,7 @@ const resellToken = () => {
                     min={0.001}
                     placeholder='Resell Price'
                     className={formStyle.Form_box_input_userName}
+                    onChange={(e) => setPrice(e.target.value)}
                     />
                 </div>
 
