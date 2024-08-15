@@ -16,7 +16,8 @@ import {
   FollowerTab,
   Slider,
   Brand,
-  Video
+  Video,
+  Loader
 } from '../components/componentsindex';
 
 // IMPORTING CONTRACT DATA
@@ -57,7 +58,7 @@ const Home = () => {
         paragraph='Discover the most outstanding NFTs in all topics of life.'
       />
       <Filter />
-      <NFTCard NFTData={nfts}/>
+      {nfts.length == 0 ? <Loader/> : <NFTCard NFTData={nfts}/> }
       <Title
         heading='Browse by category'
         paragraph='Explore the NFTs in the most featured categories.'
