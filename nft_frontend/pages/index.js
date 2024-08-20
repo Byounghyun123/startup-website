@@ -36,7 +36,7 @@ const Home = () => {
   useEffect(() => {
     if (currentAccount) {
       fetchNFTs().then((items) => {
-        console.log(nfts);
+        console.log("NFTs: ", nfts);
         setNfts(items?.reverse());
         setNftsCopy(items);
        });
@@ -61,7 +61,7 @@ const Home = () => {
         paragraph='Discover the most outstanding NFTs in all topics of life.'
       />
       <Filter />
-      {nfts.length == 0 ? <Loader/> : <NFTCard NFTData={nfts}/> }
+      {nfts?.length == 0 ? <Loader/> : <NFTCard NFTData={nfts}/> }
       <Title
         heading='Browse by category'
         paragraph='Explore the NFTs in the most featured categories.'

@@ -33,7 +33,7 @@ const NFTCard = ({ NFTData }) => {
 
     return (
         <div className={Style.NFTCard}>
-            {NFTData.map((el, i) => (
+            {NFTData?.map((el, i) => (
                 <Link href={{pathname: "/NFT-Details", query: el}}>
                     <div className={Style.NFTCard_box} key={i + 1}>
                         <div className={Style.NFTCard_box_img}>

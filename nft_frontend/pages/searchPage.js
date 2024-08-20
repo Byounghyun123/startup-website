@@ -12,16 +12,23 @@ import images from '../img';
 import { NFTMarketplaceContext } from '../Context/NFTMarketplaceContext';
 
 const searchPage = () => {
-  const {fetchNFTs} = useContext(NFTMarketplaceContext);
+  const {fetchNFTs, currentAccount} = useContext(NFTMarketplaceContext);
   const [nfts, setNfts] = useState([]);
   const [nftsCopy, setNftsCopy] = useState([]);
 
   useEffect(() => {
-   fetchNFTs().then((items) => {
-    setNfts(items.reverse());
-    setNftsCopy(items);
-   });
-  }, []);
+    try {
+      if (currentAccount) {
+        fetchNFTs().then((items) => {
+          setNfts(items?.reverse());
+          setNftsCopy(items);
+          console.log(nfts);
+        });
+      }
+    } catch (error) {
+      console.log("Please reload the browser", error);
+    }
+  }, [currentAccount]);
 
   const onHandleSearch = (value) => {
     const filteredNFTS = nfts.filter(({name}) => 
@@ -59,7 +66,7 @@ const searchPage = () => {
         onClearSearch={onClearSearch}
       />
       <Filter />
-      {nfts.length == 0 ? <Loader/>: <NFTCardTwo NFTData={nfts} />}
+      {nfts?.length == 0 ? <Loader/>: <NFTCardTwo NFTData={nfts} />}
       <Slider />
       <Brand />
     </div>

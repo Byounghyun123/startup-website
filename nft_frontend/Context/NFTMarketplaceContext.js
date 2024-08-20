@@ -64,7 +64,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             } else {
                 console.log("No Account Found");
             }
-            console.log(currentAccount);
+            console.log("Current account: ", currentAccount);
         } catch (error) {
             console.log("Something went wrong while connecting to wallet", error);
         }
@@ -83,8 +83,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 method: "eth_requestAccounts"
             });
 
+            console.log("Showing accounts: ", accounts);
             setCurrentAccount(accounts[0]);
             // window.location.reload();
+            connectingWithSmartContract();
         } catch (error) {
             console.log("Error while connecting to wallet", error);
         }
@@ -140,7 +142,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             });
 
             const url = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
-            console.log(url);
+            console.log("URL: ", url);
 
             await createSale(url, price);
             router.push('/searchPage');
@@ -169,7 +171,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 });
 
             await transaction.wait();
-            console.log(transaction);
+            console.log("Transaction: ", transaction);
         } catch (error) {
             console.log("error while creating sale", error);
         }
@@ -178,108 +180,107 @@ export const NFTMarketplaceProvider = ({ children }) => {
     //--FETCH NFTs FUNCTION
     const fetchNFTs = async () => {
         try {
-            const web3Modal = new Web3Modal();
-            const connection = await web3Modal.connect();
-            const provider = new ethers.providers.Web3Provider(connection);
-            // const provider = new ethers.BrowserProvider(connection);
+            const address = await checkIfWalletConnected();
+            if (address) {
+                const web3Modal = new Web3Modal();
+                const connection = await web3Modal.connect();
+                const provider = new ethers.providers.Web3Provider(connection);
+                // const provider = new ethers.BrowserProvider(connection);
 
-            const contract = fetchContract(provider);
+                const contract = fetchContract(provider);
 
-            const data = await contract.fetchMarketItem();
+                const data = await contract.fetchMarketItem();
 
-            // console.log(data);
+                // console.log(data);
 
-            const items = await Promise.all(
-                data.map(async({ tokenId, seller, owner, price: unformattedPrice }) => {
-                    const tokenURI = await contract.tokenURI(tokenId);
+                const items = await Promise.all(
+                    data.map(async({ tokenId, seller, owner, price: unformattedPrice }) => {
+                        const tokenURI = await contract.tokenURI(tokenId);
 
-                    const {
-                        data: { image, name, description }
-                    } = await axios.get(tokenURI);
-                    const price = ethers.utils.formatUnits(
-                        unformattedPrice.toString(),
-                        "ether"
-                    );
+                        const {
+                            data: { image, name, description }
+                        } = await axios.get(tokenURI);
+                        const price = ethers.utils.formatUnits(
+                            unformattedPrice.toString(),
+                            "ether"
+                        );
 
-                    return {
-                        price,
-                        tokenId: tokenId.toNumber(),
-                        seller,
-                        owner,
-                        image,
-                        name,
-                        description,
-                        tokenURI
-                    };
-                })
-            );
-
-            return items;
+                        return {
+                            price,
+                            tokenId: tokenId.toNumber(),
+                            seller,
+                            owner,
+                            image,
+                            name,
+                            description,
+                            tokenURI
+                        };
+                    })
+                );
+                console.log("Showing NFT: ", items);
+                return items;
+            }
         } catch (error) {
             console.log("Error while fetching NFTS", error);
         }
     };
 
-    useEffect(() => {
-      fetchNFTs();
-    }, []);
-    
-
     //--FETCHING MY NFT OR LISTED NFTs
     const fetchMyNFTsOrListedNFTs = async(type) => {
         try {
-            const contract = await connectingWithSmartContract();
+            const address = await checkIfWalletConnected();
+            if (address) {
+                const contract = await connectingWithSmartContract();
 
-            const data = 
-                type == "fetchItemsListed"
-                    ? await contract.fetchItemsListed()
-                    : await contract.fetchMyNFT();
-            const items = await Promise.all(
-                data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
-                    const tokenURI = await contract.tokenURI(tokenId);
-                    const {
-                        data: {image, name, description}
-                    } = await axios.get(tokenURI);
-                    const price = ethers.utils.formatUnits(
-                        unformattedPrice.toString(),
-                        "ether"
-                    );
+                const data = 
+                    type == "fetchItemsListed"
+                        ? await contract.fetchItemsListed()
+                        : await contract.fetchMyNFT();
+                const items = await Promise.all(
+                    data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
+                        const tokenURI = await contract.tokenURI(tokenId);
+                        const {
+                            data: {image, name, description}
+                        } = await axios.get(tokenURI);
+                        const price = ethers.utils.formatUnits(
+                            unformattedPrice.toString(),
+                            "ether"
+                        );
 
-                    return {
-                        price,
-                        tokenId: tokenId.toNumber(),
-                        seller,
-                        owner,
-                        image,
-                        name,
-                        description,
-                        tokenURI
-                    };
-                })
-            );
-            return items;
+                        return {
+                            price,
+                            tokenId: tokenId.toNumber(),
+                            seller,
+                            owner,
+                            image,
+                            name,
+                            description,
+                            tokenURI
+                        };
+                    })
+                );
+                return items;
+            }
         } catch (error) {
             console.log("Error while fetching listed NFTs", error);
         }
     };
 
-    useEffect(() => {
-        fetchMyNFTsOrListedNFTs();
-    }, []);
-    
-
     //---BUY NFTs FUNCTION
     const buyNFT = async(nft) => {
         try {
-            const contract = await connectingWithSmartContract();
-            const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+            const address = await checkIfWalletConnected();
+            if (address) {
+                const contract = await connectingWithSmartContract();
+                const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
 
-            const transaction = await contract.createMarketSale(nft.tokenId, {
-                value: price,
-            });
+                const transaction = await contract.createMarketSale(nft.tokenId, {
+                    value: price,
+                });
 
-            await transaction.wait();
-            router.push('/author');
+                await transaction.wait();
+                router.push('/author');
+            }
         } catch (error) {
             console.error("Error while buying NFT", error);
         }
