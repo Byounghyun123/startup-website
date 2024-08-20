@@ -32,7 +32,7 @@ const connectingWithSmartContract = async() => {
         console.log(signer);
 
         const contract = fetchContract(signer);
-        // console.log(contract);
+        console.log("This is the contract: ", contract);
         return contract;
     } catch (error) {
         console.log("Something went wrong while connecting with contract", error);
