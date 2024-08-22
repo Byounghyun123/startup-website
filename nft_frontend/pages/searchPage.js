@@ -31,7 +31,7 @@ const searchPage = () => {
   }, [currentAccount]);
 
   const onHandleSearch = (value) => {
-    const filteredNFTS = nfts.filter(({name}) => 
+    const filteredNFTS = nfts.filter(({ name }) => 
       name.toLowerCase().includes(value.toLowerCase())
     );
 
@@ -46,7 +46,7 @@ const searchPage = () => {
     if (nfts.length && nftsCopy.length) {
       setNfts(nftsCopy);
     }
-  }
+  };
 
   // const collectionArray = [
   //   images.nft_image_1,
@@ -70,7 +70,7 @@ const searchPage = () => {
       <Slider />
       <Brand />
     </div>
-  )
+  );
 };
 
 export default searchPage;
