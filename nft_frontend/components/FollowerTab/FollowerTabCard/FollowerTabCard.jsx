@@ -5,6 +5,7 @@ import { TiTick } from 'react-icons/ti';
 
 // INTERNAL IMPORT
 import Style from './FollowerTabCard.module.css';
+import images from '../../../img';
 
 const FollowerTabCard = ({ i, el }) => {
 
@@ -29,7 +30,7 @@ const FollowerTabCard = ({ i, el }) => {
         <div className={Style.FollowerTabCard_box_img}>
           <Image
             className={Style.FollowerTabCard_box_img_img}
-            src={el.background}
+            src={el.background || images.creatorbackground1}
             alt='profile background'
             width={500}
             height={300}
@@ -40,7 +41,7 @@ const FollowerTabCard = ({ i, el }) => {
         <div className={Style.FollowerTabCard_box_profile}>
           <Image
             className={Style.FollowerTabCard_box_profile_img}
-            src={el.user}
+            src={el.user || images.user1}
             alt='profile picture'
             width={50}
             height={50}
@@ -50,12 +51,13 @@ const FollowerTabCard = ({ i, el }) => {
         <div className={Style.FollowerTabCard_box_info}>
           <div className={Style.FollowerTabCard_box_info_name}>
             <h4>
-              Kevin Lee{""}{" "}
+              {el.seller.slice(0, 9)}
+              {".."}{" "}
               <span>
                 <MdVerified />
               </span>
             </h4>
-            <p>12.321 ETH</p>
+            <p>{el.total || 0} ETH</p>
           </div>
 
           <div className={Style.FollowerTabCard_box_info_following}>

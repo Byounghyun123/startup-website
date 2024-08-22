@@ -187,7 +187,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
             const contract = fetchContract(provider);
 
-            console.log("This is is si si is the contract: ", contract);
             const data = await contract.fetchMarketItem();
 
             // console.log(data);

@@ -19,6 +19,7 @@ import {
   Video,
   Loader
 } from '../components/componentsindex';
+import { getTopCreators } from '../TopCreators/TopCreators';
 
 // IMPORTING CONTRACT DATA
 import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
@@ -32,6 +33,10 @@ const Home = () => {
   const {fetchNFTs} = useContext(NFTMarketplaceContext);
   const [nfts, setNfts] = useState([]);
   const [nftsCopy, setNftsCopy] = useState([]);
+
+  // CREATORS LIST
+  const creators = getTopCreators(nfts);
+  console.log(creators);
 
   useEffect(() => {
     if (currentAccount) {
@@ -53,7 +58,7 @@ const Home = () => {
         paragraph='Discover the most outstanding NFTs in all topics of life.'
       />
       <AudioLive />
-      <FollowerTab />
+      {creators.length == 0 ? <Loader /> : <FollowerTab TopCreator={creators} />}
       <Slider />
       <Collection />
       <Title
