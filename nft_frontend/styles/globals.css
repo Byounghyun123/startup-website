@@ -9,6 +9,7 @@
   --bg-shadow-dark-color: #d3dae745;
   --shadow-light-color: #fff;
   --main-bg-color: #ecf0f3;
+  --overlay: #2323355e
 
   --box-shadow: 1rem 1rem 1rem var(--shadow-dark-color),
   -1rem -1rem 1rem var(--shadow-light-color);

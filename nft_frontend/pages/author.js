@@ -17,37 +17,37 @@ import { NFTMarketplaceContext } from "../Context/NFTMarketplaceContext";
 
 const author = () => {
     const popularArray = [
-        {
-          background: images.creatorbackground1,
-          user: images.user1,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        },
-        {
-          background: images.creatorbackground2,
-          user: images.user2,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        },
-        {
-          background: images.creatorbackground3,
-          user: images.user3,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        },
-        {
-          background: images.creatorbackground4,
-          user: images.user4,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        },
-        {
-          background: images.creatorbackground5,
-          user: images.user5,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        },
-        {
-          background: images.creatorbackground6,
-          user: images.user6,
-          seller: "0xasdf74l2kha9df8y4kasdf649283"
-        }
-      ];
+      {
+        background: images.creatorbackground1,
+        user: images.user1,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      },
+      {
+        background: images.creatorbackground2,
+        user: images.user2,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      },
+      {
+        background: images.creatorbackground3,
+        user: images.user3,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      },
+      {
+        background: images.creatorbackground4,
+        user: images.user4,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      },
+      {
+        background: images.creatorbackground5,
+        user: images.user5,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      },
+      {
+        background: images.creatorbackground6,
+        user: images.user6,
+        seller: "0xasdf74l2kha9df8y4kasdf649283"
+      }
+    ];
 
     const [collectibles, setCollectibles] = useState(true);
     const [created, setCreated] = useState(false);

@@ -80,7 +80,7 @@ const NavBar = () => {
   };
 
   //SMART CONTRACT SECTION
-  const { currentAccount, connectWallet } = useContext(NFTMarketplaceContext);
+  const { currentAccount, connectWallet, openError } = useContext(NFTMarketplaceContext);
 
   return (
     <div className={Style.navbar}>
@@ -186,6 +186,8 @@ const NavBar = () => {
           />
         </div>
       )}
+
+      {openError && <Error />}
     </div>
   );
 };

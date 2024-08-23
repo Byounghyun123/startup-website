@@ -45,13 +45,19 @@ export const NFTMarketplaceProvider = ({ children }) => {
     const titleData = 'Discover, collect, and sell NFTs';
 
     //-----USESTATE
+    const [error, setError] = useState("");
+    const [openError, setOpenError] = useState(false);
     const [currentAccount, setCurrentAccount] = useState("");
     const router = useRouter();
 
     //---CHECK IF WALLET IS CONNECTED (required for every web3 platform)
     const checkIfWalletConnected = async() => {
         try {
-            if (!window.ethereum) return console.log("Install MetaMask");
+            if (!window.ethereum) return (
+                setOpenError(true),
+                setError("Install MetaMask"),
+                console.log("Install MetaMask", error)
+            );
 
             const accounts = await window.ethereum.request({
                 method: "eth_accounts"
@@ -62,10 +68,14 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 // const provider = new ethers.BrowserProvider(connection);
                 // return accounts[0];
             } else {
+                setError("No Account Found");
+                setOpenError(true);
                 console.log("No Account Found");
             }
             console.log("Current account wallet: ", currentAccount);
         } catch (error) {
+            setError("Something went wrong while connecting to wallet");
+            setOpenError(true);
             console.log("Something went wrong while connecting to wallet", error);
         }
     };
@@ -77,7 +87,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
     //---CONNECT WALLET FUNCTION (required for every web3 platform)
     const connectWallet = async() => {
         try {
-            if (!window.ethereum) return console.log("Install MetaMask");
+            if (!window.ethereum) return (
+                setOpenError(true),
+                setError("Install MetaMask"),
+                console.log("Install MetaMask")
+            );
 
             const accounts = await window.ethereum.request({
                 method: "eth_requestAccounts"
@@ -88,6 +102,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
             // window.location.reload();
             connectingWithSmartContract();
         } catch (error) {
+            setOpenError(true),
+            setError("Error while connecting to wallet"),
             console.log("Error while connecting to wallet", error);
         }
     };
@@ -113,19 +129,23 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
                 return ImgHash;
             } catch (error) {
-                // setError("Unable to upload image to Pinata");
-                // setOpenError(true);
-                console.log(error);
+                setError("Unable to upload image to Pinata");
+                setOpenError(true);
+                console.log("Unable to upload image to Pinata", error);
             }
         }
-        // setError("File Is Missing, Kindly provide your file");
-        // setOpenError(true);
+        setError("File is missing, kindly provide your file");
+        setOpenError(true);
+        console.log("File is missing, kindly provide your file ");
     };
 
     //---CREATE NFT FUNCTION
     const createNFT = async(name, price, image, description, router) => {
-        if(!name || !description || !price || !image)
-            return console.log("Data is missing", error);
+        if(!name || !description || !price || !image) return (
+            setOpenError(true),
+            setError("Data is missing"),
+            console.log("Data is missing", error)
+        );
 
         const data = JSON.stringify({ name, description, image });
 
@@ -147,6 +167,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
             await createSale(url, price);
             router.push('/searchPage');
         } catch (error) {
+            setError("Error while creating NFT");
+            setOpenError(true);
             console.log("Error while creating NFT", error);
         }
     };
@@ -173,6 +195,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
             await transaction.wait();
             console.log("Transaction: ", transaction);
         } catch (error) {
+            setError("Error while creating sale");
+            setOpenError(true);
             console.log("error while creating sale", error);
         }
     };
@@ -218,13 +242,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
             console.log("Showing NFT: ", items);
             return items;
         } catch (error) {
+            setError("Error while fetching NFTs");
+            setOpenError(true);
             console.log("Error while fetching NFTS", error);
         }
     };
 
-    // useEffect(() => {
-    //     fetchNFTs();
-    // }, []);
+    useEffect(() => {
+        fetchNFTs();
+    }, []);
 
     //--FETCHING MY NFT OR LISTED NFTs
     const fetchMyNFTsOrListedNFTs = async(type) => {
@@ -260,9 +286,16 @@ export const NFTMarketplaceProvider = ({ children }) => {
             );
             return items;
         } catch (error) {
+            setError("Error while fetching listed NFTs");
+            setOpenError(true);
             console.log("Error while fetching listed NFTs", error);
         }
     };
+
+    useEffect(() => {
+      fetchMyNFTsOrListedNFTs();
+    }, []);
+    
 
     //---BUY NFTs FUNCTION
     const buyNFT = async(nft) => {
@@ -277,6 +310,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
             await transaction.wait();
             router.push('/author');
         } catch (error) {
+            setError("Error while buyding NFT");
+            setOpenError(true);
             console.error("Error while buying NFT", error);
         }
     };
@@ -294,6 +329,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 buyNFT,
                 currentAccount,
                 titleData,
+                setOpenError,
+                openError,
+                error,
             }}
         >
             {children}
