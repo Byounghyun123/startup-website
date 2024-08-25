@@ -27,7 +27,7 @@ const searchPage = () => {
       setError("Please reload the browser");
       console.log("Please reload the browser", error);
     }
-  }, [currentAccount]);
+  }, []);
 
   const onHandleSearch = (value) => {
     const filteredNFTS = nfts.filter(({ name }) => 
