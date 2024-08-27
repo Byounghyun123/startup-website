@@ -24,7 +24,8 @@
 
 html,
 body,
-Button {
+Button,
+input {
   padding: 0;
   margin: 0;
   font-family: 'JetBrains Mono', monospace;
